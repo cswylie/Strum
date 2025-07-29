@@ -1,4 +1,5 @@
 import gradio as gr
+import os
 from rag_pipeline import answer_query
 
 def chat_with_assistant(user_input, history):
@@ -27,4 +28,8 @@ with gr.Blocks() as demo:
                       inputs=[user_input, chat_history],
                       outputs=[chat_history, chat_history])
 
-demo.launch()
+host = os.environ.get("GRADIO_HOST", "127.0.0.1") # Before it runs, it looks for an env var in Docker 
+port = int(os.environ.get("GRADIO_PORT", 7860))   # It will grab that env var if it exists, otherwise will default to parameter on the right
+
+demo.launch(server_name=host, server_port=port)
+
