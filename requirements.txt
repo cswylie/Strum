@@ -9,3 +9,6 @@ ollama
 gradio
 # Ableton control (phase 2)
 #python-osc
+beautifulsoup4
+ddgs
+requests

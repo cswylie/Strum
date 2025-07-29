@@ -30,4 +30,4 @@ EXPOSE 7860 11434
 CMD ollama serve & \
     sleep 5 && \
     ollama pull mistral && \
-    python ai-music-assistant/app/ui.py
+    python strum/app/ui.py
