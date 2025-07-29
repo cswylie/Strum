@@ -1,0 +1,11 @@
+# Core RAG Libraries
+langchain>=0.2.0
+faiss-cpu
+sentence-transformers
+
+# Mistral (via Ollama)
+ollama
+# UI (Gradio web app)
+gradio
+# Ableton control (phase 2)
+#python-osc
