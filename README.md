@@ -12,11 +12,11 @@ python3 ui.py
 ## Docker Run Instructions:
 - Build the image:
 ```bash
-docker build -t ai-music-assistant .
+docker build -t strum .
 ```
 - Run the container:
 ```bash
-docker run --gpus all -e GRADIO_HOST=0.0.0.0 -e GRADIO_PORT=7860 -p 7860:7860 ai-music-assistant
+docker run --gpus all -e GRADIO_HOST=0.0.0.0 -e GRADIO_PORT=7860 -p 7860:7860 strum
 ```
 ## Running Mistral
 - If you run the code by itself, the ui.py file should execute it properly and run it locally.

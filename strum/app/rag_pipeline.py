@@ -52,22 +52,41 @@ def get_relevant_docs(query, index, docs, k=3):          # k is the number of to
 
 # Sends the user's query and the retrieved context to the Mistral LLM via Ollama
 # Final step in the RAG pipeline
-def query_mistral_with_context(query, context_docs):
+def query_mistral_with_context(query, context_docs, conversation_history=None):
+    if conversation_history is None:
+        conversation_history = []
+
     # Combine context and query for prompt
-    context = "\n\n".join(context_docs)                                                        # join all relevant documents into one big string
-    prompt = f"Use the following info to answer the question:\n{context}\n\nQuestion: {query}" # Creates the final prompt to send to the LLM
+    context = "\n\n".join(context_docs) # join all relevant documents into one big string
+    system_message = f"Use the following info to answer the question:\n{context}"
+
+    # Start building the message chain with context at the top
+    # context will change from message to message, but chat history will
+    # stay the same
+    messages = [{"role": "system", "content": system_message}]
+
+    # Add conversation history next
+    for user_msg, assistant_msg in conversation_history:
+        messages.append({"role": "user", "content": user_msg})
+        messages.append({"role": "assistant", "content": assistant_msg})
+    
+    # Finally add most recent query at the bottom
+    messages.append({"role": "user", "content": query})
+    
+    # Gets the response back from the Mistral AI
     response = ollama.chat(
         model="mistral",
-        messages=[{"role": "user", "content": prompt}])                                                  # Gets the response back from the Mistral AI
+        messages=messages)
+    
     return response
 
 # Combines everything for the RAG pipeline
-def answer_query(query):
-    index, docs = load_vector_store()                         # load an existing FAISS index and its associated documents from disk 
-    if index is None or docs is None:                         # If one doesn't exist, create one
+def answer_query(query, conversation_history=None):
+    index, docs = load_vector_store()                     # load an existing FAISS index and its associated documents from disk 
+    if index is None or docs is None:                     # If one doesn't exist, create one
         print("Building vector store...")
         docs = load_docs()
         index, docs = build_vector_store(docs)
-    relevant_docs = get_relevant_docs(query, index, docs)     # Grabs the top relevent documents from the docs based on the user query
-    answer = query_mistral_with_context(query, relevant_docs) # Returns the answer after asking the LLM
+    relevant_docs = get_relevant_docs(query, index, docs) # Grabs the top relevent documents from the docs based on the user query
+    answer = query_mistral_with_context(query, relevant_docs, conversation_history) # Returns the answer after asking the LLM
     return answer
