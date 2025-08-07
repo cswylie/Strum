@@ -3,6 +3,7 @@ import os
 from rag_pipeline import answer_query
 
 def chat_with_assistant(user_input, history):
+    # print("Chat history:", history, flush=True)
     # history is just an array of tuples
     response = answer_query(user_input, history)
     

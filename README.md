@@ -18,6 +18,11 @@ docker build -t strum .
 ```bash
 docker run --gpus all -e GRADIO_HOST=0.0.0.0 -e GRADIO_PORT=7860 -p 7860:7860 strum
 ```
+- Alternatively, you can just run the provided **build** shell script, which will do everything in one command.
+    - Just make sure to chmod it so that it actually has permission to run.
+```bash
+./build.sh
+```
 ## Running Mistral
 - If you run the code by itself, the ui.py file should execute it properly and run it locally.
 - Because I don't want to push a massive dataset, I have included a small webscraper that will scrape data from webpages based on the search provided.

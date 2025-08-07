@@ -18,7 +18,7 @@ def load_docs():
     for filename in os.listdir(DATA_DIR):
         if filename.endswith(".txt"):
             with open(os.path.join(DATA_DIR, filename), "r", encoding="utf-8") as f:
-                docs.append(f.read()) # reads entire contens of file as a string
+                docs.append(f.read()) # reads entire contents of file as a string
     return docs
 
 # Takes list of docs, creates a FAISS index, adds all embedding to the index
@@ -46,7 +46,7 @@ def load_vector_store():
 # searches the FAISS index for the kth closest document
 # returns the document texts
 def get_relevant_docs(query, index, docs, k=3):          # k is the number of top matches to return
-    q_emb = model.encode([query], convert_to_numpy=True) # NumPy array of shape (1, embedding_dim) 1 doc and lenght of each embedding
+    q_emb = model.encode([query], convert_to_numpy=True) # NumPy array of shape (1, embedding_dim) 1 doc and length of each embedding
     D, I = index.search(q_emb, k)                        # FAISS searches the index for most similar vectors
     return [docs[i] for i in I[0]]                       # D is distance of matches and I is the index of each match within docs
 
