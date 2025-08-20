@@ -28,8 +28,3 @@ services:
       - key: PORT
         value: 3000
     # This will be accessible via HTTPS at your-service-name.onrender.com
-
-# Persistent storage for RAG service
-disks:
-  - name: rag-data
-    sizeGB: 10
