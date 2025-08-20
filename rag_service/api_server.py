@@ -12,10 +12,10 @@ app = FastAPI()
 # Add CORS middleware to allow frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://christianswylie.com"],  # Your production frontend domain
+    allow_origins=["https://christianswylie.com"],
     allow_credentials=True,
-    allow_methods=["POST", "GET"],  # Only the methods you need
-    allow_headers=["Content-Type"],  # Only the headers you need
+    allow_methods=["POST", "GET"],
+    allow_headers=["Content-Type"],
 )
 
 class HistoryItem(BaseModel):
