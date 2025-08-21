@@ -2,7 +2,7 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional, Dict
+from typing import List, Optional
 import uvicorn
 
 from rag_functions import initialize_vector_store, get_relevant_docs, query_llm_with_context
