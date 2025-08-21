@@ -4,7 +4,8 @@ import faiss
 import numpy as np
 import requests
 
-HF_API_URL = "https://cswylie-StrumAI.hf.space/api/predict"
+HF_API_URL = "https://router.huggingface.co/v1/chat/completions"
+HF_TOKEN = os.getenv("HF_TOKEN")  
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -15,7 +16,7 @@ DOCS_FILE = os.path.join(BASE_DIR, "docs.npy")
 # Load or create embeddings model
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-def split_text(text, chunk_size=750, overlap=100):
+def split_text(text, chunk_size=1000, overlap=100):
     """Split the documents into smaller pieces to be vectorized and indexed"""
     chunks = []
     start = 0
@@ -66,8 +67,7 @@ def query_llm_with_context(query, context_docs, conversation_history=None):
     """Sends the user's query and retrieved context to the LLM via HuggingFace"""
     if conversation_history is None:
         conversation_history = []
-    
-    # Combine context and query for prompt
+
     context = "\n\n".join(context_docs)
     system_message = f"""Use the following info to answer the question:
     {context}
@@ -77,24 +77,28 @@ def query_llm_with_context(query, context_docs, conversation_history=None):
         {"role": "system", "content": system_message},
         {"role": "user", "content": query}
     ]
-    
+
+    headers = {
+        "Authorization": f"Bearer {HF_TOKEN}", # need a valid Hugging Face API token
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": "openai/gpt-oss-20b", # Change to desired model here
+        "messages": messages,
+        "stream": False
+    }
+
     try:
-        payload = {"data": [messages]}
-        response = requests.post(HF_API_URL, json=payload, timeout=60)
+        response = requests.post(HF_API_URL, json=payload, headers=headers, timeout=60)
         response.raise_for_status()
-        
         result = response.json()
-        
-        # Extract the response from the API result
-        if "data" in result and len(result["data"]) > 0:
-            api_response = result["data"][0]
-            if "response" in api_response:
-                return api_response["response"]
-            elif "error" in api_response:
-                return f"API Error: {api_response['error']}"
-        
+
+        # Correct parsing for chat completions
+        if "choices" in result and len(result["choices"]) > 0:
+            return result["choices"][0]["message"]["content"]
+
         return "No valid response received"
-        
+
     except Exception as e:
         print(f"Error querying HuggingFace: {e}")
         return {"error": str(e)}

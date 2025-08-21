@@ -12,7 +12,7 @@ app = FastAPI()
 # Add CORS middleware to allow frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://christianswylie.com"],
+    allow_origins=["http://localhost:5173", "https://christianswylie.com"], # vite frontend
     allow_credentials=True,
     allow_methods=["POST", "GET"],
     allow_headers=["Content-Type"],
@@ -50,10 +50,10 @@ async def query_rag(data: QueryRequest):
             raise HTTPException(status_code=500, detail=result["error"])
         
         return QueryResponse(
-            response=result['message']['content'],
+            response=result,
             history=(data.history or []) + [HistoryItem(
                 question=data.message, 
-                answer=result['message']['content']
+                answer=result
             )]
         )
     except HTTPException as e:
