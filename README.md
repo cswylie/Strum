@@ -1,34 +1,21 @@
-## README/Ableton AI Assistant
+## README/Strum RAG Pipeline
 
-- If you want to run locally, you can install the dependencies by using the command:
-```python
-pip install -r requirements.txt
-```
-- Then you can navigate to ui.py in the app directory and run:
-```python
-python3 ui.py
-```
-- Otherwise, I recommend running it in the provided docker container.
-## Docker Run Instructions:
-- Build the image:
+- This is app works in combination with a frontend access point.
+- I have the correct frontend detailed in my website repo. I was unable to find a hosting website to host this, so I'm just chucking it here for now to be used. 
+- Strum is a RAG pipeline using Ableton Documentation to provide relevent help when using Ableton.
+- It provides context to queries sent to the Open AI model: **gpt-oss-20b** and it will respond accordingly. 
+
+## How to Use/Download
+- There is a ***docker-compose.yml*** file included in the repo. Just simply run:
 ```bash
-docker build -t strum .
+docker-compose up --build
 ```
-- Run the container:
+- This will build and run the container, opening port 8000 on localhost.
+- Query ***http://localhost:8000/query*** and it will return the response from the chatbot and the history of the conversation.
+- The history is an array of Objects in the form {question: "", answer: ""}.
+- Just run:
 ```bash
-docker run --gpus all -e GRADIO_HOST=0.0.0.0 -e GRADIO_PORT=7860 -p 7860:7860 strum
+docker-compose up
 ```
-- Alternatively, you can just run the provided **build** shell script, which will do everything in one command.
-    - Just make sure to chmod it so that it actually has permission to run.
-```bash
-./build.sh
-```
-## Running Mistral
-- If you run the code by itself, the ui.py file should execute it properly and run it locally.
-- Because I don't want to push a massive dataset, I have included a small webscraper that will scrape data from webpages based on the search provided.
-- Fill up the data folder with relevent data and it will essentially alloq you to specialize the AI in anything, I just happened to use it for music based functions.
-- I'm going to add a little bit more functionality as time goes on, but for now this is base version.
-- Make sure to have access to the GPU from the container.
-    - The LLM leverages a lot of GPU power to work, so in order for it to actually compute tasks, it needs access to the GPU.
-- The Dockerfile will install Ollama into the image and then pull the Mistral model to allow everything to work properly.
-    - As such, the image will be fairly large, but that is to be expected with LLM models running locally.
+- And the container will spin up again.
+- The container will also create a data folder to store the relevent data.
