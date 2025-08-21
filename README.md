@@ -19,3 +19,8 @@ docker-compose up
 ```
 - And the container will spin up again.
 - The container will also create a data folder to store the relevent data.
+
+## Important Info
+- I was originally using this locally with the use of ollama to pull the LLM and run it locally. This can still be done, but I opted to instead use HuggingFace to query the chatbot for results because it was free and faster. 
+- Of course, this means that you now need a **HuggingFace** account and an authentification token to be able to even access the chatbot, it's not open for everyone. While this is a pain, I opted to go this way because it makes the service as a whole smaller, faster, and more efficient.
+- If you are going to clone this repo, **make sure** to create a ***.env*** file and add the **HF_TOKEN** as an environment variable, then everything should run smoothly.
