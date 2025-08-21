@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  myapp:
+    build: .
+    container_name: myapp_container
+    environment:
+      - HF_TOKEN=${HF_TOKEN}   # Pull from host env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data       # optional: mount local data folder
