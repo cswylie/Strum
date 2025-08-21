@@ -3,7 +3,7 @@ version: "3.8"
 services:
   myapp:
     build: .
-    container_name: myapp_container
+    container_name: strum_backend
     environment:
       - HF_TOKEN=${HF_TOKEN}   # Pull from host env
     ports:
