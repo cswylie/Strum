@@ -13,6 +13,8 @@ docker-compose up --build
 - This will build and run the container, opening port 8000 on localhost.
 - Query ***http://localhost:8000/query*** and it will return the response from the chatbot and the history of the conversation.
 - The history is an array of Objects in the form {question: "", answer: ""}.
+- I have added an interface that will open upon composing the docker build, and you can interact with the chatbot there.
+- You can access the interface at ***localhost:7860***.
 - Just run:
 ```bash
 docker-compose up

@@ -1,12 +1,21 @@
 version: "3.8"
 
 services:
-  myapp:
+  backend:
     build: .
     container_name: strum_backend
     environment:
-      - HF_TOKEN=${HF_TOKEN}   # Pull from host env
+      - HF_TOKEN=${HF_TOKEN}
     ports:
       - "8000:8000"
     volumes:
-      - ./data:/app/data       # optional: mount local data folder
+      - ./data:/app/data # mount the data locally
+
+  gradio:
+    build: .
+    container_name: strum_gradio
+    command: python interface.py
+    ports:
+      - "7860:7860"
+    depends_on:
+      - backend
